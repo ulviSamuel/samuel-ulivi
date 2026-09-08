@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ulvisamuel.github.io/samuel-ulivi/sitemap.xml

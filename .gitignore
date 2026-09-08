@@ -1,0 +1,7 @@
+/sources/
+/resources/
+/design-reference/
+node_modules/
+dist/
+.DS_Store
+/PORTFOLIO_SPEC.md
