@@ -5,7 +5,7 @@ export const profile: Profile = {
   location: 'Trieste area, Italy',
   email: 'ulivi.samuel@gmail.com',
   positioning: 'Computer Engineering student with hands-on experience across software development and cybersecurity operations.',
-  summary: 'Currently studying Computer Engineering at the University of Trieste, with practical experience in enterprise incident response, web applications, Android development, networking, databases, and embedded experimentation.',
+  summary: 'I am currently studying Computer Engineering at the University of Trieste, with practical experience in enterprise incident response, web applications, Android development, networking, databases, and embedded experimentation.',
 };
 
 export const socialLinks: SocialLink[] = [

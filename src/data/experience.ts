@@ -7,7 +7,7 @@ export const experience: Experience[] = [
     role: 'CSIRT Junior Cybersecurity Analyst',
     organization: 'Accenture team',
     context: 'Supporting a major international financial organization, which remains unnamed for privacy.',
-    description: 'Managed security events identified through organizational monitoring systems and supported containment and mitigation activities for critical incidents in an enterprise environment.',
+    description: 'I managed security events identified through organizational monitoring systems and supported containment and mitigation activities for critical incidents in an enterprise environment.',
     reviewStatus: 'verified',
   },
   {
@@ -16,7 +16,7 @@ export const experience: Experience[] = [
     role: 'Network Administrator intern',
     organization: 'Insiel S.p.A.',
     context: 'Two-week internship in Trieste.',
-    description: 'Explored virtualization services across departments and created a promotional brochure describing the services and technologies used.',
+    description: 'I explored virtualization services across departments and created a promotional brochure describing the services and technologies used.',
     reviewStatus: 'verified',
   },
   {
@@ -25,7 +25,7 @@ export const experience: Experience[] = [
     role: 'Android Developer intern',
     organization: 'Elettra Sincrotrone Trieste',
     context: 'Three-week internship carried out with a peer and colleague.',
-    description: 'Co-developed an Android application for managing a digital logbook, with the goal of supporting users in recording and managing research data.',
+    description: 'I contributed to an Android application for managing a digital logbook together with another student, with the goal of supporting users in recording and managing research data.',
     reviewStatus: 'review-required',
   },
 ];

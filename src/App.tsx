@@ -30,12 +30,33 @@ function App(): JSX.Element {
   }, [locale]);
 
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      document.querySelectorAll<HTMLElement>('.scroll-section, .experience-entry, .education-entry, .project-entry').forEach((element) => {
+        const bounds = element.getBoundingClientRect();
+        if (bounds.top < window.innerHeight * 0.92 && bounds.bottom > 0) element.classList.add('is-visible');
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [locale]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (visible) setActiveSection(visible.target.id);
     }, { rootMargin: '-22% 0px -62% 0px', threshold: [0.05, 0.2, 0.5] });
     sectionIds.forEach((id) => document.getElementById(id) && observer.observe(document.getElementById(id)!));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) revealObserver.unobserve(entry.target);
+        entry.target.classList.toggle('is-visible', entry.isIntersecting);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+    document.querySelectorAll('.scroll-section, .experience-entry, .education-entry, .project-entry').forEach((element) => revealObserver.observe(element));
+    return () => revealObserver.disconnect();
   }, []);
 
   useEffect(() => {
@@ -92,38 +113,38 @@ function Header({ activeSection, locale, text, menuOpen, scrolled, setMenuOpen, 
 }
 
 function Hero({ text }: { text: SiteCopy }): JSX.Element {
-  return <section className="hero" id="profile" aria-labelledby="hero-title">
+  return <section className="hero scroll-section" id="profile" aria-labelledby="hero-title">
     <div className="hero-copy"><p className="hero-greeting">{text.hello}</p><h1 id="hero-title">{text.name}</h1><p className="hero-role">{text.role}</p><a className="hero-link" href="#manifesto">{text.discover}<span aria-hidden="true">↘</span></a></div>
     <div className="hero-portrait"><div className="hero-geometry hero-geometry--one" /><div className="hero-geometry hero-geometry--two" /><img src="./assets/portrait.png" alt="Portrait of Samuel Ulivi" width="1536" height="1024" fetchPriority="high" /></div>
   </section>;
 }
 
 function Manifesto({ text }: { text: SiteCopy }): JSX.Element {
-  return <section className="manifesto" id="manifesto" aria-labelledby="manifesto-title"><div className="section-frame"><p className="section-kicker">/ 01</p><h2 id="manifesto-title">{text.manifesto}</h2></div></section>;
+  return <section className="manifesto scroll-section" id="manifesto" aria-labelledby="manifesto-title"><div className="section-frame"><p className="section-kicker">/ 01</p><h2 id="manifesto-title">{text.manifesto}</h2></div></section>;
 }
 
 function About({ text }: { text: SiteCopy }): JSX.Element {
-  return <section className="about section-light" id="about" aria-labelledby="about-title"><div className="section-frame about-grid"><div><p className="section-kicker">/ {text.nav.profile}</p><h2 id="about-title">{text.aboutTitle}</h2></div><div className="about-copy"><p>{text.about}</p><p>{text.aboutSecond}</p><div className="about-rule" aria-hidden="true" /></div></div></section>;
+  return <section className="about section-light scroll-section" id="about" aria-labelledby="about-title"><div className="section-frame about-grid"><div><p className="section-kicker">/ {text.nav.profile}</p><h2 id="about-title">{text.aboutTitle}</h2></div><div className="about-copy"><p>{text.about}</p><p>{text.aboutSecond}</p><div className="about-rule" aria-hidden="true" /></div></div></section>;
 }
 
 function Experience({ text }: { text: SiteCopy }): JSX.Element {
-  return <section className="experience section-light" id="experience" aria-labelledby="experience-title"><div className="section-frame"><SectionIntro id="experience-title" kicker={`/ 02 · ${text.nav.experience}`} title={text.nav.experience} intro={text.experienceIntro} /><div className="experience-list">{text.experience.map(([role, organization, period, description], index) => <article className="experience-entry" key={role}><span className="entry-number">0{index + 1}</span><div className="entry-meta"><p>{period}</p><h3>{role}</h3><span>{organization}</span></div><p className="entry-description">{description}</p></article>)}</div></div></section>;
+  return <section className="experience section-light scroll-section" id="experience" aria-labelledby="experience-title"><div className="section-frame"><SectionIntro id="experience-title" kicker={`/ 02 · ${text.nav.experience}`} title={text.nav.experience} intro={text.experienceIntro} /><div className="experience-list">{text.experience.map(([role, organization, period, description], index) => <article className="experience-entry" key={role}><span className="entry-number">0{index + 1}</span><div className="entry-meta"><p>{period}</p><h3>{role}</h3><span>{organization}</span></div><p className="entry-description">{description}</p></article>)}</div></div></section>;
 }
 
 function Education({ text }: { text: SiteCopy }): JSX.Element {
-  return <section className="education section-soft" id="education" aria-labelledby="education-title"><div className="section-frame"><SectionIntro id="education-title" kicker={`/ 03 · ${text.nav.education}`} title={text.nav.education} intro={text.educationIntro} /><div className="education-layout"><div className="education-list">{text.education.map(([title, institution, period, details], index) => <article className={`education-entry ${index === 0 ? 'is-current' : ''}`} key={title}><div className="education-period">{period}</div><div><h3>{title}</h3><p>{institution}</p><span>{details}</span></div></article>)}</div><aside className="credentials"><p className="section-kicker">{text.ui.certifications}</p>{text.certifications.map((certification) => <p key={certification}>{certification}</p>)}<p className="section-kicker credentials-languages">{text.ui.languages}</p>{languages.map((language) => <p key={language.language}>{language.language} <span>{language.level}</span></p>)}</aside></div></div></section>;
+  return <section className="education section-soft scroll-section" id="education" aria-labelledby="education-title"><div className="section-frame"><SectionIntro id="education-title" kicker={`/ 03 · ${text.nav.education}`} title={text.nav.education} intro={text.educationIntro} /><div className="education-layout"><div className="education-list">{text.education.map(([title, institution, period, details]) => <article className="education-entry" key={title}><div className="education-period">{period}</div><div><h3>{title}</h3><p>{institution}</p><span>{details}</span></div></article>)}</div><aside className="credentials"><p className="section-kicker">{text.ui.certifications}</p>{text.certifications.map((certification) => <p key={certification}>{certification}</p>)}<p className="section-kicker credentials-languages">{text.ui.languages}</p>{languages.map((language) => <p key={language.language}>{language.language} <span>{language.level}</span></p>)}</aside></div></div></section>;
 }
 
 function Capabilities({ text, currentCapability, activeCapability, setActiveCapability }: { text: SiteCopy; currentCapability: (typeof capabilities)[number]; activeCapability: number; setActiveCapability: (index: number) => void }): JSX.Element {
-  return <section className="capabilities section-light" id="skills" aria-labelledby="skills-title"><div className="section-frame"><SectionIntro id="skills-title" kicker={`/ 04 · ${text.nav.skills}`} title={text.nav.skills} intro={text.skillsIntro} /><div className="capability-layout"><div className="capability-index" role="tablist" aria-label={text.nav.skills}>{capabilities.map((capability, index) => <button key={capability.id} className={activeCapability === index ? 'is-active' : ''} type="button" role="tab" aria-selected={activeCapability === index} aria-controls={`capability-panel-${capability.id}`} onClick={() => setActiveCapability(index)}><span>0{index + 1}</span>{text.capabilities[index][0]}</button>)}</div><div className="capability-panel" id={`capability-panel-${currentCapability.id}`} role="tabpanel"><p className="panel-label">{text.capabilities[activeCapability][0]}</p><h3>{text.capabilities[activeCapability][1]}</h3><ul>{text.capabilityItems[activeCapability].map((item) => <li key={item}>{item}</li>)}</ul></div></div></div></section>;
+  return <section className="capabilities section-light scroll-section" id="skills" aria-labelledby="skills-title"><div className="section-frame"><SectionIntro id="skills-title" kicker={`/ 04 · ${text.nav.skills}`} title={text.nav.skills} intro={text.skillsIntro} /><div className="capability-layout"><div className="capability-index" role="tablist" aria-label={text.nav.skills}>{capabilities.map((capability, index) => <button key={capability.id} className={activeCapability === index ? 'is-active' : ''} type="button" role="tab" aria-selected={activeCapability === index} aria-controls={`capability-panel-${capability.id}`} onClick={() => setActiveCapability(index)}><span>0{index + 1}</span>{text.capabilities[index][0]}</button>)}</div><div className="capability-panel" id={`capability-panel-${currentCapability.id}`} role="tabpanel"><p className="panel-label">{text.capabilities[activeCapability][0]}</p><h3>{text.capabilities[activeCapability][1]}</h3><ul>{text.capabilityItems[activeCapability].map((item) => <li key={item}>{item}</li>)}</ul></div></div></div></section>;
 }
 
 function Projects({ text, currentProjectCopy, openProject, setOpenProject }: { text: SiteCopy; currentProjectCopy: (id: string) => [string, string]; openProject: string | null; setOpenProject: (id: string | null) => void }): JSX.Element {
-  return <section className="projects section-soft" id="work" aria-labelledby="work-title"><div className="section-frame"><SectionIntro kicker={`/ 05 · ${text.ui.selected}`} title={text.ui.selected} intro={text.workIntro} /><div className="project-list">{projects.map((project, index) => { const projectCopy = currentProjectCopy(project.id); const isOpen = openProject === project.id; return <article className={`project-entry ${isOpen ? 'is-open' : ''}`} key={project.id}><button type="button" className="project-trigger" aria-expanded={isOpen} aria-controls={`project-${project.id}`} onClick={() => setOpenProject(isOpen ? null : project.id)}><span className="project-number">0{index + 1}</span><span className="project-main"><span className="project-title">{project.title}</span><span className="project-category">{project.context === 'Professional internship at Elettra Sincrotrone Trieste' ? text.projectCategories.mobile : project.categories.includes('Embedded systems') ? text.projectCategories.embedded : text.projectCategories.web}</span></span><span className="project-year">{project.year}</span><span className="project-arrow" aria-hidden="true">↗</span></button><div className="project-details" id={`project-${project.id}`} hidden={!isOpen}><p>{projectCopy[0]}</p><p className="project-evidence">{projectCopy[1]}</p><div className="project-tech">{project.technologies.slice(0, 5).map((technology) => <span key={technology}>{technology}</span>)}</div><a href={project.repositoryUrl} target="_blank" rel="noreferrer">{text.ui.repository} <span aria-hidden="true">↗</span></a></div></article>; })}</div></div></section>;
+  return <section className="projects section-soft scroll-section" id="work" aria-labelledby="work-title"><div className="section-frame"><SectionIntro id="work-title" kicker={`/ 05 · ${text.ui.selected}`} title={text.ui.selected} intro={text.workIntro} /><div className="project-list">{projects.map((project, index) => { const projectCopy = currentProjectCopy(project.id); const isOpen = openProject === project.id; return <article className={`project-entry ${isOpen ? 'is-open' : ''}`} key={project.id}><button type="button" className="project-trigger" aria-expanded={isOpen} aria-controls={`project-${project.id}`} onClick={() => setOpenProject(isOpen ? null : project.id)}><span className="project-number">0{index + 1}</span><span className="project-main"><span className="project-title">{project.title}</span><span className="project-category">{project.context === 'Professional internship at Elettra Sincrotrone Trieste' ? text.projectCategories.mobile : project.categories.includes('Embedded systems') ? text.projectCategories.embedded : text.projectCategories.web}</span></span><span className="project-year">{project.year}</span><span className="project-arrow" aria-hidden="true">↗</span></button><div className="project-details" id={`project-${project.id}`} hidden={!isOpen}><p>{projectCopy[0]}</p><p className="project-evidence">{projectCopy[1]}</p><div className="project-tech">{project.technologies.slice(0, 5).map((technology) => <span key={technology}>{technology}</span>)}</div><a href={project.repositoryUrl} target="_blank" rel="noreferrer">{text.ui.repository} <span aria-hidden="true">↗</span></a></div></article>; })}</div></div></section>;
 }
 
 function ContactSection({ text, locale, requestCv }: { text: SiteCopy; locale: Locale; requestCv: string }): JSX.Element {
-  return <section className="contact section-dark" id="contact" aria-labelledby="contact-title"><div className="section-frame contact-layout"><div><p className="section-kicker">/ 06 · {text.nav.contact}</p><h2 id="contact-title">{text.contactTitle}</h2><p className="contact-text">{text.contactText}</p></div><div className="contact-links"><a className="contact-email" href={mailto(locale === 'it' ? 'Contatto dal portfolio di Samuel Ulivi' : 'Contact from Samuel Ulivi portfolio')}>{profile.email}<span aria-hidden="true">↗</span></a><a href={socialLinks.find((link) => link.label === 'LinkedIn')!.href} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a href={socialLinks.find((link) => link.label === 'GitHub')!.href} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a><a className="request-link" href={requestCv}>{text.ui.requestCv}<span aria-hidden="true">↗</span></a></div></div></section>;
+  return <section className="contact section-dark scroll-section" id="contact" aria-labelledby="contact-title"><div className="section-frame contact-layout"><div><p className="section-kicker">/ 06 · {text.nav.contact}</p><h2 id="contact-title">{text.contactTitle}</h2><p className="contact-text">{text.contactText}</p></div><div className="contact-links"><a className="contact-email" href={mailto(locale === 'it' ? 'Contatto dal portfolio di Samuel Ulivi' : 'Contact from Samuel Ulivi portfolio')}>{profile.email}<span aria-hidden="true">↗</span></a><a href={socialLinks.find((link) => link.label === 'LinkedIn')!.href} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a href={socialLinks.find((link) => link.label === 'GitHub')!.href} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a><a className="request-link" href={requestCv}>{text.ui.requestCv}<span aria-hidden="true">↗</span></a></div></div></section>;
 }
 
 function Footer({ locale, text, changeLocale }: { locale: Locale; text: SiteCopy; changeLocale: (locale: Locale) => void }): JSX.Element {

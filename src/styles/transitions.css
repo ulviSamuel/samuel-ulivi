@@ -1,0 +1,18 @@
+/* Scroll transitions reveal the next idea with a different visual gesture. */
+.js .manifesto h2{opacity:1;clip-path:inset(0 0 100% 0);transform:translateY(22px);transition:clip-path 1.1s cubic-bezier(.22,.75,.23,1),transform 1.1s cubic-bezier(.22,.75,.23,1)}
+.js .manifesto.is-visible h2{clip-path:inset(0);transform:none}
+.js .about-grid{opacity:1;transform:translateX(-28px);transition:transform 1s cubic-bezier(.22,.75,.23,1)}
+.js .about.is-visible .about-grid{transform:none}
+.js .experience .section-intro,.js .education .section-intro{opacity:1;clip-path:inset(0 0 0 10%);transform:translateY(14px);transition:clip-path .9s cubic-bezier(.22,.75,.23,1),transform .9s cubic-bezier(.22,.75,.23,1)}
+.js .experience.is-visible .section-intro,.js .education.is-visible .section-intro{clip-path:inset(0);transform:none}
+.js .experience-entry{opacity:1;transform:translateX(-26px);transition:transform .8s cubic-bezier(.22,.75,.23,1),padding .35s ease}
+.js .experience-entry.is-visible{transform:none}
+.js .capability-layout{opacity:1;transform:translateY(24px);transition:transform .8s cubic-bezier(.22,.75,.23,1)}
+.js .capabilities.is-visible .capability-layout{transform:none}
+.js .projects .section-intro{opacity:1;transform:translateY(20px);transition:transform .85s cubic-bezier(.22,.75,.23,1)}
+.js .projects.is-visible .section-intro{transform:none}
+.js .project-entry{opacity:1;transform:translateY(18px);transition:transform .7s cubic-bezier(.22,.75,.23,1),padding .35s ease}
+.js .project-entry.is-visible{transform:none}
+.js .contact-layout{opacity:1;transform:translateY(26px);transition:transform .95s cubic-bezier(.22,.75,.23,1)}
+.js .contact.is-visible .contact-layout{transform:none}
+@media (prefers-reduced-motion:reduce){.js .manifesto h2,.js .about-grid,.js .experience .section-intro,.js .education .section-intro,.js .experience-entry,.js .capability-layout,.js .projects .section-intro,.js .project-entry,.js .contact-layout{opacity:1;clip-path:none;transform:none;transition:none}}
