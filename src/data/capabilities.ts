@@ -41,5 +41,5 @@ export const capabilities: Capability[] = [
 
 export const languages = [
   { language: 'Italian', level: 'Native language', selfAssessed: false },
-  { language: 'English', level: 'B1 across listening, reading, writing, speaking, and interaction', selfAssessed: true },
+  { language: 'English', level: 'B2 across listening, reading, writing, speaking, and interaction', selfAssessed: true },
 ];
